@@ -1,0 +1,4 @@
+pip install dart-fss
+pip install python-dotenv
+pip install finance-datareader
+pip install plotly
