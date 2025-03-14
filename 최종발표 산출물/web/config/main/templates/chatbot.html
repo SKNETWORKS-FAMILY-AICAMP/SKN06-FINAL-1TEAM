@@ -1,0 +1,205 @@
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-header">
+            ChatBot
+            <button class="close-btn" onclick="toggleChatbot()">×</button>
+        </div>
+
+        <div class="chatbox" id="chatbox">
+            <div class="message bot-message">안녕하세요! 무엇을 도와드릴까요? 😊</div>
+        </div>
+
+        <div class="suggested-questions">
+            <button onclick="selectSuggestedQuestion('현대위아의 2023년 당기순이익을 알려주세요.')">현대위아의 2023년 당기순이익을 알려주세요.</button>
+            <button onclick="selectSuggestedQuestion('현대모비스의 2024년 전망을 별도재무제표 기반으로 예측해주세요.')">현대모비스의 2024년 전망을 별도재무제표 기반으로 예측해주세요.</button>
+            <button onclick="selectSuggestedQuestion('최근 자동차 산업의 언론 동향이 어떤가요?')">최근 자동차 산업의 언론 동향이 어떤가요?</button>
+        </div>
+
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="메시지를 입력하세요...">
+            <button onclick="sendMessage()">전송</button>
+        </div>
+    </div>
+<style>
+    * {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+    .chatbot-container {
+        position: fixed;
+        top: 50%;
+        right: -550px;
+        width: 500px;
+        height: 75%;
+        max-height: 750px;
+        background: #fff;
+        border-radius: 10px 0 0 10px;
+        box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+        transition: right 0.3s ease-in-out;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .chatbot-header {
+        background: #FFF5E1;
+        color: #FF6F00;
+        padding: 18px;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chatbot-header .close-btn {
+        background: none;
+        border: none;
+        color: #FF6F00;
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .suggested-questions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 8px 12px;
+        justify-content: center;
+    }
+    
+
+    .suggested-questions button {
+        background: none;
+        color: #FF6F00;
+        border: 1px solid #FF6F00;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .suggested-questions button:hover {
+        background: #FF6F00;
+        color: #fff;
+    }
+
+    .chatbox {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .message {
+        max-width: 90%;
+        padding: 12px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        font-size: 16px;
+    }
+
+    .bot-message {
+        background: #ddd;
+        align-self: flex-start;
+    }
+
+    .user-message {
+        background: #FF6F00;
+        color: #fff;
+        align-self: flex-end;
+    }
+
+    .chat-input {
+        display: flex;
+        padding: 12px;
+        background: #f1f1f1;
+        border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        outline: none;
+        font-size: 16px;
+    }
+
+    .chat-input button {
+        background: #FFF5E1;
+        color: #FF6F00;
+        border: none;
+        padding: 12px 16px;
+        margin-left: 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .show-chatbot {
+        right: 0 !important;
+    }
+</style>
+
+<script>
+    function toggleChatbot() {
+        const chatbot = document.getElementById("chatbot");
+        chatbot.classList.toggle("show-chatbot");
+    }
+
+    function sendMessage() {
+        const inputField = document.getElementById("user-input");
+        const messageText = inputField.value.trim();
+        if (messageText === "") return;
+
+        const chatBox = document.getElementById("chatbox");
+
+        // 사용자 메시지 추가
+        const userMessage = document.createElement("div");
+        userMessage.classList.add("message", "user-message");
+        userMessage.innerText = messageText;
+        chatBox.appendChild(userMessage);
+
+        // 입력창 초기화
+        inputField.value = "";
+
+        // 봇 응답 자리 만들기
+        const botMessage = document.createElement("div");
+        botMessage.classList.add("message", "bot-message");
+        botMessage.innerText = "답변 준비 중...";
+        chatBox.appendChild(botMessage);
+
+        // 자동 스크롤
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Django API 호출하여 챗봇 응답 가져오기
+        fetch("/chat/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message: messageText }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 기존 "답변 준비 중..." 메시지 업데이트
+            botMessage.innerText = data.response;
+            chatBox.scrollTop = chatBox.scrollHeight; // 최신 메시지 보기
+        })
+        .catch(error => {
+            botMessage.innerText = "⚠️ 오류 발생! 다시 시도해 주세요.";
+            console.error("오류 발생:", error);
+        });
+    }
+
+    function selectSuggestedQuestion(question) {
+        const inputField = document.getElementById("user-input");
+        inputField.value = question;
+
+        // sendMessage() 호출하여 자동 전송
+        sendMessage();
+    }
+</script>

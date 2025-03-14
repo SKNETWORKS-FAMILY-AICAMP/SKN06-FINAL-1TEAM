@@ -1,2 +1,4 @@
 .env
 .idea/
+chromadb_store2/
+__pycache__/

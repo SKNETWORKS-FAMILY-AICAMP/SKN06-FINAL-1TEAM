@@ -1,0 +1,58 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기업 상세</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/newsDetails.css' %}">
+</head>
+<body>
+
+    {% include "header.html" %}  <!-- ✅ header.html을 직접 삽입 -->
+
+<div class="outer-container">
+    <div class="card-container">
+        <!-- 뉴스 제목 -->
+        <h2 class="news-title">{{ news_item.title }}</h2>
+
+        <!-- 날짜 & 신문사 (오른쪽 정렬) -->
+        <div class="news-meta">
+            <span class="pub-date">{{ news_item.pub_date|date:"Y-m-d" }}</span>
+            &nbsp;|&nbsp;
+            <span class="news-paper">{{ news_item.newspaper }}</span>
+        </div>
+
+        <!-- 뉴스 본문 -->
+        <div class="news-content">
+            {{ news_item.content_display|linebreaks }}
+        </div>
+
+        <!-- 임시 해시태그 (예시) -->
+        <div class="news-tags">
+            {% if keywords_list %}
+                {% for keyword in keywords_list %}
+                    <span># {{ keyword }}</span>
+                {% endfor %}
+            {% endif %}
+            {% if link_org %}
+                <span><a href="{{ link_org }}" target="_blank" rel="noopener noreferrer">기사 원문</a></span>  <!-- ✅ 링크 정상 동작 -->
+            {% else %}
+                <span>관련 태그가 없습니다.</span>  <!-- ✅ 빈 경우 예외 처리 -->
+            {% endif %}
+        </div>
+        
+
+        <!-- 뒤로 가기 버튼 -->
+        <div class="back-button">
+            <!-- 뉴스 목록 페이지로 돌아가는 링크 (news_list URL name 가정) -->
+            <a href="{% url 'news_list' %}">BACK</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

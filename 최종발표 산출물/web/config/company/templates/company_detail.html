@@ -1,0 +1,454 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기업 상세</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/company_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/financial.css' %}">
+    <link rel="stylesheet" href="{% static 'css/executive_worker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    {% include "header.html" %}
+
+    <!-- JSON 데이터 전달 -->
+    {{ financial_health_metrics|json_script:"financialHealthData" }}
+    {{ financial_results|json_script:"financialResultsData" }}
+    {{ executives|json_script:"executiveData" }}
+    {{ workers|json_script:"workerData" }}
+
+    <div class="detail-container">
+        <div class="detail-card">
+            <h2 class="corp-name">{{ company.corp_name }}</h2>
+            <p><strong>법인코드:</strong> {{ company.corp_code }}</p>
+            <p><strong>종목코드:</strong> {{ company.stock_code }}</p>
+            <p><strong>대표자명:</strong> {{ company.ceo_nm }}</p>
+            <p><strong>주소:</strong> {{ company.adres }}</p>
+            <p><strong>홈페이지:</strong>
+                {% if "http" in company.hm_url %}
+             <a href="{{ company.hm_url }}" target="_blank" rel="noopener noreferrer">
+                    {{ company.hm_url }}
+                </a>
+            {% else %}
+                <a href="http://{{ company.hm_url }}" target="_blank" rel="noopener noreferrer">
+                    {{ company.hm_url }}
+                </a>
+            {% endif %}
+            </p>
+            <p><strong>사업개yo </strong> {{ company.a|safe }}</p>
+        </div>
+        <div>
+        </div>
+
+        <div class="hexagon-chart-container">
+            <h3>재무 건전성 지표</h3>
+            <canvas id="hexagonChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 📌 재무예측 차트 -->
+     <div class="revenue-chart-container">
+        <h3>매출액 추이</h3>
+        <h4>(별도재무제표 기반)</h4>
+        <canvas id="revenueChart"></canvas>
+     </div>
+
+    <!-- 📌 재무 정보 탭 버튼 -->
+    <h3>재무 정보</h3>
+    <div class="financial-tabs">
+        <button class="tab-button active" data-type="BS_single">재무상태표(별도)</button>
+        <button class="tab-button" data-type="BS_connection">재무상태표(연결)</button>
+        <button class="tab-button" data-type="IS_single">손익계산서(별도)</button>
+        <button class="tab-button" data-type="IS_connection">손익계산서(연결)</button>
+        <button class="tab-button" data-type="CF_single">현금흐름표(별도)</button>
+        <button class="tab-button" data-type="CF_connection">현금흐름표(연결)</button>
+    </div>
+
+    <div class="amount-card">
+        <table id="financial-table">
+            <thead>
+                <tr>
+                    <th>구분</th>
+                    <th>2023년 총금액</th>
+                    <th>2022년 총금액</th>
+                    <th>2021년 총금액</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- 데이터가 여기에 삽입됨 -->
+            </tbody>
+        </table>
+    </div>
+
+    <h3>임원 현황</h3>
+<div class="executive-card">
+    <table id="executive-table">
+        <thead>
+            <tr>
+                <th>이름</th>
+                <th>생년월일</th>
+                <th>직위</th>
+                <th>재직기간</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- JavaScript에서 동적으로 채워질 부분 -->
+        </tbody>
+    </table>
+
+    <!-- Pagination 버튼 -->
+    <div class="pagination">
+        <button id="prev-executive" disabled>◀ 이전</button>
+        <span id="executive-page-info">1 / 1</span>
+        <button id="next-executive">다음 ▶</button>
+    </div>
+</div>
+
+<h3>직원 현황</h3>
+<div class="worker-card">
+    <table id="worker-table">
+        <thead>
+            <tr>
+                <th>부서</th>
+                <th>정규직</th>
+                <th>비정규직</th>
+                <th>직원수</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- JavaScript에서 동적으로 채워질 부분 -->
+        </tbody>
+    </table>
+
+    <!-- Pagination 버튼 -->
+    <div class="pagination">
+        <button id="prev-worker" disabled>◀ 이전</button>
+        <span id="worker-page-info">1 / 1</span>
+        <button id="next-worker">다음 ▶</button>
+    </div>
+</div>
+
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("✅ 페이지 로드 완료!");
+
+            // 📌 기업 코드 가져오기
+            const buttons = document.querySelectorAll(".tab-button");
+            const tableBody = document.getElementById("table-body");
+            const corpCode = "{{ company.corp_code }}"; 
+
+            // JSON 데이터 가져오기 (임원 및 직원)
+            const executiveElement = document.getElementById("executiveData");
+            console.log("ddddd:", executiveElement)
+            const workerElement = document.getElementById("workerData");
+
+            let executives = [];
+            let workers = [];
+
+            if (executiveElement){
+                try {
+                    executives = JSON.parse(executiveElement.textContent);
+                    console.log("📌 임원 데이터:", executives);
+                    setupTablePagination(executives, "executive-table", "executive", 5);
+                } catch (error) {
+                    console.error("🚨 임원 데이터 파싱 오류:", error);
+                }
+            }
+
+
+            if (workerElement){
+                try {
+                    workers = JSON.parse(workerElement.textContent);
+                    console.log("📌 직원 데이터:", workers);
+                    setupTablePagination(workers, "worker-table", "worker", 5);
+                } catch (error) {
+                    console.error("🚨 직원 데이터 파싱 오류:", error);
+                }
+            }
+
+            // 📌 Hexagon Chart 데이터 가져오기
+            const financialHealthElement = document.getElementById("financialHealthData");
+            if (financialHealthElement) {
+                const financialHealthData = JSON.parse(financialHealthElement.textContent);
+                console.log('📊 재무 건전성 데이터:', financialHealthData);
+
+                if (Array.isArray(financialHealthData) && financialHealthData.length > 0) {
+                    const labels = ["유동비율", "부채비율", "자기자본이익률(ROE)", "총자산회전율", "이자보상비율", "매출성장률"];
+                    const healthMetrics = financialHealthData[0] || {};
+
+                    const values = [
+                        healthMetrics.current_ratio ?? 0, 
+                        healthMetrics.debt_ratio ?? 0, 
+                        healthMetrics.return_on_equity ?? 0,
+                        healthMetrics.total_asset_turnover ?? 0,
+                        healthMetrics.interest_coverage_ratio ?? 0,
+                        healthMetrics.revenue_growth_rate ?? 0
+                    ];
+
+                    const hexagonCanvas = document.getElementById('hexagonChart');
+                    if (hexagonCanvas) {
+                        new Chart(hexagonCanvas.getContext('2d'), {
+                            type: 'radar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: "재무 지표",
+                                    data: values,
+                                    backgroundColor: "rgba(255, 102, 0, 0.2)",
+                                    borderColor: "rgba(255, 102, 0, 1)",
+                                    borderWidth: 3,
+                                    pointBackgroundColor: "rgba(255, 102, 0, 1)",  // 데이터 점 색상
+                                    pointBorderColor: "#ffffff",  // 흰색 테두리 
+                                    pointHoverBackgroundColor: "#ffffff",  // 호버1
+                                    pointHoverBorderColor: "rgba(255, 102, 0, 1)", // 호버2
+                                }]
+                            }
+                        });
+                    }
+                }
+            }
+
+            // 📌 재무 테이블 데이터 가져오기 (AJAX)
+            function fetchFinancialData(reportType) {
+                fetch(`/api/financial/${corpCode}/${reportType}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        tableBody.innerHTML = createTableRows(data);
+                        addToggleEventListeners(); // 펼치기 이벤트 추가
+                    })
+                    .catch(error => console.error("🚨 JSON 불러오기 오류:", error));
+            }
+            function checkAndHideButtons(data) {
+        buttons.forEach(button => {
+            let reportType = button.getAttribute("data-type");
+            
+            // 해당 reportType 데이터가 없거나 비어 있으면 버튼 숨기기
+            if (!data || Object.keys(data).length === 0) {
+                button.style.display = "none";
+            } else {
+                button.style.display = "inline-block"; // 데이터가 있으면 다시 보이게
+            }
+        });
+    }
+
+    function createTableRows(data, level = 0, parentKey = "") {
+                let rows = "";
+
+                for (let key in data) {
+                    if (key === "amounts") continue;
+
+                    if (typeof data[key] === "object" && data[key] !== null) {
+                        let rowKey = parentKey ? `${parentKey}-${key}` : key;
+                        let padding = 20 * level;
+
+                        // 🔹 하위 항목이 있는지 확인 (amounts를 제외한 키가 있는 경우)
+                        let hasChildren = Object.keys(data[key]).some(k => k !== "amounts" && typeof data[key][k] === "object");
+
+                        // 📌 하위 항목이 있는 경우에만 토글 버튼 추가
+                        let toggleButton = hasChildren ? `<span class="toggle-button">▶</span>` : "";
+
+                        // ✅ 기본적으로 숨겨진 상태 (tr 요소에 'hidden-row' 클래스 추가)
+                        rows += `
+                            <tr data-key="${rowKey}" class="category collapsed">
+                                <td style="padding-left:${padding}px; text-align:left; cursor:pointer;">
+                                    ${toggleButton} ${key}
+                                </td>
+                                <td>${data[key].amounts ? (data[key].amounts.amount_2023?.toLocaleString() || '-') : '-'}</td>
+                                <td>${data[key].amounts ? (data[key].amounts.amount_2022?.toLocaleString() || '-') : '-'}</td>
+                                <td>${data[key].amounts ? (data[key].amounts.amount_2021?.toLocaleString() || '-') : '-'}</td>
+                            </tr>
+                        `;
+
+                        if (hasChildren) {
+                            rows += createTableRows(data[key], level + 1, rowKey);
+                        }
+                    }
+                }
+                return rows;
+            }
+
+    function addToggleEventListeners() {
+        document.querySelectorAll(".category").forEach(row => {
+            let key = row.getAttribute("data-key");
+            let subRows = document.querySelectorAll(`tr[data-key^="${key}-"]`);
+
+            // ✅ 기본적으로 모든 하위 항목을 숨김
+            subRows.forEach(subRow => subRow.classList.add("hidden-row"));
+
+            row.addEventListener("click", function () {
+                let isExpanded = this.classList.contains("expanded");
+
+                let toggleIcon = this.querySelector(".toggle-button");
+                if (toggleIcon) {
+                    toggleIcon.textContent = isExpanded ? "▶" : "▼";
+                }
+
+                subRows.forEach(subRow => {
+                    subRow.classList.toggle("hidden-row");
+                });
+
+                this.classList.toggle("expanded");
+                this.classList.toggle("collapsed");
+            });
+        });
+    }
+
+    function setupTablePagination(data, tableId, type, rowsPerPage) {
+        const tableBody = document.querySelector(`#${tableId} tbody`);
+        const prevButton = document.getElementById(`prev-${type}`);
+        const nextButton = document.getElementById(`next-${type}`);
+        const pageInfo = document.getElementById(`${type}-page-info`);
+
+        let currentPage = 1;
+        const totalPages = Math.ceil(data.length / rowsPerPage);
+
+        function displayTable(page) {
+            tableBody.innerHTML = "";
+
+            const startIndex = (page - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            const paginatedData = data.slice(startIndex, endIndex);
+
+            paginatedData.forEach(rowData => {
+                let row;
+                if (type === "executive") {
+                    row = `
+                        <tr>
+                            <td>${rowData.name}</td>
+                            <td>${rowData.birth || "N/A"}</td>
+                            <td>${rowData.position}</td>
+                            <td>${rowData.tenure || "N/A"}</td>
+                        </tr>
+                    `;
+                } else {
+                    row = `
+                        <tr>
+                            <td>${rowData.department || "N/A"}</td>
+                            <td>${rowData.full_time_employee || 0}</td>
+                            <td>${rowData.contract_worker || 0}</td>
+                            <td>${rowData.total_staff || 0}</td>
+                        </tr>
+                    `;
+                }
+                tableBody.innerHTML += row;
+            });
+
+            // 페이지 정보 업데이트
+            pageInfo.textContent = `${currentPage} / ${totalPages}`;
+
+            // 버튼 활성화/비활성화
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage === totalPages;
+        }
+
+        prevButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                displayTable(currentPage);
+            }
+        });
+
+        nextButton.addEventListener("click", function () {
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayTable(currentPage);
+            }
+        });
+
+        // 첫 번째 페이지 렌더링
+        displayTable(currentPage);
+    }
+
+    // 📌 버튼 클릭 시 AJAX 호출하여 데이터 갱신
+    buttons.forEach(button => {
+        button.addEventListener("click", function () {
+            let reportType = this.getAttribute("data-type");
+
+            buttons.forEach(btn => btn.classList.remove("active"));
+            this.classList.add("active");
+
+            fetchFinancialData(reportType);
+        });
+    });
+            // 📌 기본값: 재무상태표(BS_single) 자동 로드
+            fetchFinancialData("BS_single");
+
+            
+        });
+    </script>
+    <script>
+        // JSON 데이터 가져오기
+    const financialResults = JSON.parse(document.getElementById("financialResultsData").textContent);
+
+console.log("재무 데이터:", financialResults);
+
+// 데이터 100만 단위로 변환 (값이 없으면 0으로 대체)
+let predicted_2024 = (financialResults[0]["Predicted_2024"] ?? 0) / 1_000_000;
+let actual_2023 = (financialResults[0]["Actual_2023"] ?? 0) / 1_000_000;
+let actual_2022 = (financialResults[0]["Actual_2022"] ?? 0) / 1_000_000;
+let actual_2021 = (financialResults[0]["Actual_2021"] ?? 0) / 1_000_000;
+
+let myCt = document.getElementById('revenueChart').getContext('2d');
+
+let myChart = new Chart(myCt, {
+    type: 'bar',
+    data: {
+        labels: ['2021', '2022', '2023', '2024 예측'],
+        datasets: [{
+            label: '매출 (단위: 백만)',
+            data: [
+                actual_2021,actual_2022,actual_2023,predicted_2024
+            ],
+            backgroundColor: [ 
+                'rgba(70, 130, 180, 0.7)',  // 스틸 블루 (연한 투명도)
+                'rgba(70, 130, 180, 0.7)',
+                'rgba(70, 130, 180, 0.7)',
+                'rgba(70, 130, 180, 0.3)'  // 연한 스틸 블루 (예측)
+            ],
+            borderColor: [
+                'rgba(70, 130, 180, 1)',
+                'rgba(70, 130, 180, 1)',
+                'rgba(70, 130, 180, 1)',
+                'rgba(70, 130, 180, 1)'
+            ],
+            borderWidth: 2,
+            borderRadius: 5,
+            borderDash: [5, 5],
+            barPercentage: 0.8,
+            categoryPercentage: 0.9
+            },]
+            
+        }, options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: "rgba(200, 200, 200, 0.3)"  // 그리드라인
+                },
+                ticks: {
+                    color: "#333"
+                },
+                x: {
+                    ticks: {
+                        color: "#333"
+                    }
+                }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
+

@@ -1,0 +1,104 @@
+/* 전체 컨테이너 */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: sans-serif;
+}
+
+/* 페이지 타이틀 */
+.page-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 검색 영역 */
+.search-bar {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.search-bar input[type="text"] {
+    width: 500px;
+    height: 30px;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.search-bar button {
+    height: 46px;
+    width: 68px;
+    margin-left: 5px;
+    background-color: #ff6600;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+.search-bar button:hover {
+    background-color: #e65500;
+}
+
+/* 카드 목록 */
+.cards {
+    display: flex;
+    flex-wrap: wrap;        /* 화면이 좁아지면 자동 줄바꿈 */
+    gap: 20px;             /* 카드 사이 여백 */
+    justify-content: center;
+}
+.card {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 300px;          /* 카드 너비 */
+    box-sizing: border-box;
+}
+.corp-name {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+.ceo-name, .stock-code, .address {
+    margin-bottom: 5px;
+    color: #666;
+}
+.button {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #ff6600;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+}
+.button:hover {
+    background-color: #e65500;
+}
+
+/* 페이지네이션 */
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+    max-width: 100%;
+}
+.pagination a {
+    text-decoration: none;
+    color: #2b2d2e;
+    padding: 5px 10px;
+    margin: 0 3px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+.pagination a:hover {
+    background-color: #2b2d2e;
+    color: #ececec;
+}
+.current,pagination span {
+    font-weight: bold;
+    padding: 5px 10px;
+    margin: 0 3px;
+    border-radius: 5px;
+    border: 1px solid #2b2d2e;
+    background-color: #2b2d2e;
+    color: white;
+    text-decoration: underline; 
+}

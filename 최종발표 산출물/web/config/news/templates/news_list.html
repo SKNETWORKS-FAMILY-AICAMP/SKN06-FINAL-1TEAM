@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News 목록</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/news.css' %}">
+</head>
+<body>
+
+    {% include "header.html" %}  <!-- ✅ header.html을 직접 삽입 -->
+
+<div class="container">
+    <div class="container">
+        <!-- 🔍 검색창 -->
+        <div class="search-bar">
+            <form method="get" action="{% url 'news_list' %}">
+                <input type="text" name="search" placeholder="Enter keywords" value="{{ query|default:'' }}" />
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    
+        <!-- 📰 뉴스 목록 -->
+        <ul class="news-list">
+            {% for news in page_obj %}
+                <li class="news-item">
+                    <a class="news-title" href="{% url 'news_detail' news.id %}">
+                        {{ news.title }}
+                    </a>
+                    <span class="pub-info">
+                        {{ news.pub_date|date:"Y-m-d" }} | {{ news.newspaper }}
+                    </span>
+                </li>
+            {% empty %}
+                <p>검색 결과가 없습니다.</p>
+            {% endfor %}
+        </ul>
+    
+        <!-- 페이지네이션 -->
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a class="page-link" href="?page=1&search={{ query }}">« 처음</a>
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ query }}">‹ 이전</a>
+            {% endif %}
+    
+            {% for num in page_range %}
+                {% if page_obj.number == num %}
+                    <span class="current-page active">{{ num }}</span>
+                {% else %}
+                    <a class="page-link" href="?page={{ num }}&search={{ query }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+    
+            {% if page_obj.has_next %}
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ query }}">다음 ›</a>
+                <a class="page-link" href="?page={{ total_pages }}&search={{ query }}">마지막 »</a>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>

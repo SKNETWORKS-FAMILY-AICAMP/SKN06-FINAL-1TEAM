@@ -1,0 +1,74 @@
+/* 전체 배경색(연한 오렌지) */
+
+/* 카드 가운데 정렬을 위한 컨테이너 */
+.outer-container {
+    width: 100%;
+    min-height: 100vh;           /* 화면 높이 꽉 채우기 */
+    display: flex;
+    justify-content: center;     /* 수평 중앙 */
+    align-items: center;         /* 수직 중앙 */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* 카드 자체 */
+.card-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 20px;
+    max-width: 700px;
+    width: 100%;    /* 모바일에서 꽉 채울 수 있도록 */
+    position: relative;
+}
+
+/* 뉴스 제목 */
+.news-title {
+    font-size: 1.0rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* 날짜 & 신문사 */
+.news-meta {
+    display: flex;
+    justify-content: flex-end;  /* 오른쪽 정렬 */
+    font-size: 0.9rem;
+    color: #999;
+    margin-bottom: 20px;
+}
+
+/* 뉴스 본문 */
+.news-content {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* 태그 (예시) */
+.news-tags {
+    margin-bottom: 20px;
+}
+.news-tags span {
+    display: inline-block;
+    background-color: #ffe2cc;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin-right: 10px;
+    font-size: 0.8rem;
+}
+
+/* 뒤로가기 버튼 */
+.back-button a {
+    text-decoration: none;
+    background-color: #ff6600;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.back-button a:hover {
+    background-color: #e65500;
+}

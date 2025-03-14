@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Stratify{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logos">
+            <a href="{% url 'home' %}">Stratify</a>
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'news_list' %}">News</a></li>
+                <li><a href="{% url 'company_list' %}">Company</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 🔴 고정된 동그라미 추가 -->
+    <div class="fixed-circle" onclick="toggleChatbot()">AI</div>
+
+    <!-- 🔵 chatbot.html 포함 -->
+    {% include 'chatbot.html' %}
+    
+
+        
+
+    
+        
+        
+</body>
+
+    
+</html>

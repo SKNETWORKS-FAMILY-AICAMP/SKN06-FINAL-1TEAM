@@ -1,0 +1,145 @@
+.logo {
+    font-size: 80px;
+    color: orange;
+    text-shadow: 3px 3px 6px gray;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 검색창 컨테이너 */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.dropdown, .search-input, .search-btn {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid gray;
+    font-size: 16px;
+}
+
+#search-input {
+    flex: 1;
+    max-width: 48%;
+    height: 30px;
+    padding: 12px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+}
+
+#search-btn {
+
+    width: 50%;
+    max-width: 100px;
+    height: 56px;
+    margin-left: 5px;
+    background-color: #ff6600; /* ✅ Identity Color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    transition: background 0.3s ease-in-out;
+    text-align: center;
+}
+
+.search-btn:hover {
+    background-color: #E65C00;
+}
+
+/* 탭 버튼 컨테이너 */
+.tabs-container {
+    display: flex;
+    justify-content: center;
+
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* 탭 버튼 스타일 */
+.tab-btn {
+    background: #ff6600;
+
+    color: white;
+    border: none;
+    padding: 14px 22px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.tab-btn:hover {
+    background: #ff4500;
+}
+
+.tab-btn.active {
+    background: #ff4500;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 내용 컨테이너 */
+.descriptions {
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 35%;
+    margin: 30px auto;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+/* 탭 내용 (전환 애니메이션) */
+.tab-content {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.tab-content.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 아이콘 스타일 */
+.icon {
+    font-size: 22px;
+    margin-right: 8px;
+}
+
+.check-icon {
+    font-size: 18px;
+    color: #28a745;
+    margin-right: 5px;
+}
+
+/* 리스트 스타일 */
+.descriptions ul {
+    list-style: none;
+    padding: 0;
+}
+
+.descriptions ul li {
+    font-size: 15px;
+    margin: 8px 0;
+    padding-left: 25px;
+    position: relative;
+    text-align: center;
+}
+
+.descriptions ul li::before {
+
+    color: #28a745;
+
+    position: absolute;
+    left: 0;
+}

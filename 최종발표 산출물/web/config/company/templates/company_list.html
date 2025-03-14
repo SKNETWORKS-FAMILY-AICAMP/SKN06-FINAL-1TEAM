@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기업 상세</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/company_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+</head>
+<body>
+
+    {% include "header.html" %}  <!-- ✅ header.html을 직접 삽입 -->
+
+<div class="container">
+    <h1 class="page-title">기업 목록</h1>
+
+    <!-- 검색창 -->
+    <div class="search-bar">
+        <form method="get" action="">
+            <input type="text" name="search" placeholder="검색어를 입력하세요" value="{{ search_query }}">
+            <button type="submit">검색</button>
+        </form>
+    </div>
+
+    <!-- 기업 목록을 카드 형태로 표시 -->
+    <div class="cards">
+        {% for company in page_obj %}
+        <div class="card" onclick="goToCompanyDetail('{{ company.corp_code }}')">
+            <h2 class="corp-name" >{{ company.corp_name }}</h2>
+            <p class="ceo-name">대표자: {{ company.ceo_nm }}</p>
+            <p class="stock-code">종목코드: {{ company.stock_code }}</p>
+            <p class="address">주소: {{ company.adres }}</p>
+
+            <!-- 홈페이지 링크가 있으면 버튼으로 표시 -->
+            {% if company.hm_url %}
+            <p><a class="button" href="{% if 'http' not in company.hm_url %}http://{{ company.hm_url }}{% else %}{{ company.hm_url }}{% endif %}" 
+                target="_blank">
+                홈페이지
+             </a></p>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p>검색 결과가 없습니다.</p>
+        {% endfor %}
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">« 처음</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">‹ 이전</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="current">{{ num }}</span>
+            {% else %}
+                <a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">다음 ›</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">마지막 »</a>
+        {% endif %}
+    </div>
+</div>
+<script>
+    function goToCompanyDetail(corpCode) {
+        let url = `/companies/${corpCode}/`;  // Django URL 패턴에 맞춰 수정
+        window.location.href = url;  // 페이지 이동
+    }
+    
+    // 내부 링크 클릭 시, 카드 전체 클릭 방지
+    document.querySelectorAll('.company-link, .button').forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    });
+    </script>
+</body>
+</html>

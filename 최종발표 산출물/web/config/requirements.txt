@@ -1,0 +1,17 @@
+langchain
+langchain-community
+openai
+chromadb
+tiktoken
+pymysql
+joblib
+rapidfuzz
+pandas
+python-dotenv
+requests
+scikit-learn
+chromadb
+django
+mysqlclient
+django-cors-headers
+whitenoise

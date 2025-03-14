@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <style>
+        #searchResults {
+            border: 1px solid #ddd;
+            max-width: 400px;
+            background: white;
+            position: absolute;
+            z-index: 1000;
+            display: none;
+        }
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .result-item:hover {
+            background: #f5f5f5;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet"> -->
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+
+</head>
+<body>
+
+    {% include "header.html" %}  <!-- 🔹 헤더 포함 -->
+
+    <div class="container">
+        <h1 class="logo">
+            <img src="{% static 'images/Stratify logo_ver4.png' %}" alt="Stratify Logo" style="width: 150px; max-width: 300px; height: auto;">
+        </h1>
+        
+        <!-- 🔎 검색창 -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="기업명 검색" autocomplete="off">
+            <button id="search-btn">S e a r c h</button>
+            <div id="searchResults"></div>
+        </div>
+
+        <!-- 📌 탭 버튼 -->
+        <div class="tabs-container">
+            <button class="tab-btn" data-tab="news">📢 뉴스</button>
+            <button class="tab-btn" data-tab="report">📄 사업보고서 요약</button>
+            <button class="tab-btn" data-tab="prediction">📊 기업전망 예측</button>
+        </div>
+        
+        <!-- 📝 내용 변경 -->
+        <div class="descriptions">
+        
+            <div class="tab-content" id="report">
+                <h2><span class="icon">📄</span> 사업보고서 요약</h2>
+                <p>기업의 공식 사업보고서를 AI가 분석하고 요약하여 제공합니다.</p>
+        
+                <h3><span class="icon">📌</span> 주요 기능</h3>
+                <ul>
+                    <li><span class="check-icon">✔</span> 사업보고서 핵심 내용 요약</li>
+                    <li><span class="check-icon">✔</span> 주요 재무 지표 및 성장 전략 분석</li>
+                    <li><span class="check-icon">✔</span> 시장에서 기업의 위치 평가</li>
+                </ul>
+        
+                <h3><span class="icon">🎯</span> 활용 예시</h3>
+                <ul>
+                    <li><span class="check-icon">✔</span> 투자 전에 기업의 재무 상태 및 성장 가능성 검토</li>
+                    <li><span class="check-icon">✔</span> 경쟁사의 전략을 파악하여 시장에서의 위치 비교</li>
+                    <li><span class="check-icon">✔</span> 기업의 장기적인 목표 및 비즈니스 모델 분석</li>
+                </ul>
+            </div>
+        
+            <div class="tab-content" id="prediction">
+                <h2><span class="icon">📊</span> 기업전망 예측</h2>
+                <p>AI가 기업의 데이터를 분석하여 성장 가능성을 예측합니다.</p>
+        
+                <h3><span class="icon">📌</span> 주요 기능</h3>
+                <ul>
+                    <li><span class="check-icon">✔</span> AI 기반 기업 성장 가능성 예측</li>
+                    <li><span class="check-icon">✔</span> 산업 및 경쟁사 비교 분석</li>
+                    <li><span class="check-icon">✔</span> 투자 리스크 분석 및 평가</li>
+                </ul>
+        
+                <h3><span class="icon">🎯</span> 활용 예시</h3>
+                <ul>
+                    <li><span class="check-icon">✔</span> AI 분석을 통해 성장 가능성이 높은 기업을 선별</li>
+                    <li><span class="check-icon">✔</span> 특정 기업의 리스크 요소를 미리 확인하여 대비</li>
+                    <li><span class="check-icon">✔</span> 업계 평균 대비 특정 기업의 경쟁력을 평가</li>
+                </ul>
+            </div>
+
+            <div class="tab-content active" id="news">
+                <h2><span class="icon">✅</span> 뉴스</h2>
+                <p>최신 경제 뉴스 및 기업 관련 소식을 실시간으로 제공합니다.</p>
+                <p>기업의 움직임, 시장 동향, 산업 변화 등을 빠르게 파악할 수 있습니다.</p>
+        
+                <h3><span class="icon">📌</span> 주요 기능</h3>
+                <ul>
+                    <li><span class="check-icon">✔</span> 최신 경제 뉴스 제공</li>
+                    <li><span class="check-icon">✔</span> 뉴스의 주요 내용 키워드 제공 및 검색</li>
+                </ul>
+        
+                <h3><span class="icon">🎯</span> 활용 예시</h3>
+                <ul>
+                    <li><span class="check-icon">✔</span> 관심 있는 기업의 최근 소식을 빠르게 확인</li>
+                    <li><span class="check-icon">✔</span> 경제 뉴스 트렌드를 분석하여 투자 기회 발견</li>
+                    <li><span class="check-icon">✔</span> 실시간 뉴스 업데이트를 통해 시장 변동성 대응</li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    <script>
+        function goToCompanyDetail(corpCode) {
+            let url = `/companies/${corpCode}/`;  // Django URL 패턴에 맞춰 수정
+            window.location.href = url;  // 페이지 이동
+        }
+        
+        // 내부 링크 클릭 시, 카드 전체 클릭 방지
+        document.querySelectorAll('.company-link, .button').forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+        });
+        </script>
+    <script>
+$(document).ready(function() {
+    let searchTimeout; // ✅ 디바운싱을 위한 변수
+
+    // 🔍 검색 입력 이벤트 (keyup → input으로 변경)
+    $("#search-input").on("input", function() {
+        let query = $(this).val().trim(); // ✅ 공백 제거
+
+        clearTimeout(searchTimeout); // ✅ 기존 요청 제거 (디바운싱)
+
+        if (query.length > 1) { // ✅ 최소 2글자 이상 입력 시 검색 실행
+            searchTimeout = setTimeout(() => {
+                searchCompany(query);
+            }, 300); // ✅ 300ms 동안 추가 입력이 없으면 실행
+        } else {
+            $("#searchResults").hide();
+        }
+    });
+
+    // 🔎 검색 버튼 클릭 이벤트 추가
+    $("#search-btn").click(function() {
+        let query = $("#search-input").val().trim();
+        if (query.length > 1) {
+            searchCompany(query);
+        }
+    });
+
+    /// 🔍 검색 실행 함수 (AJAX 요청)
+function searchCompany(query) {
+    $.ajax({
+        url: "/search-company/",  // ✅ Django에서 처리할 URL
+        method: "GET",
+        data: { keyword: query },
+        success: function(response) {
+            let results = response.data.slice(0, 5); // ✅ 최대 5개만 표시
+            let html = "";
+
+            if (results.length > 0) {
+                results.forEach(company => {
+                    html += `<div class="result-item" 
+                                data-code="${company.corp_code}" 
+                                onclick="goToCompanyDetail('${company.corp_code}')">
+                                ${company.stock_name}
+                             </div>`;
+                });
+            } else {
+                html = `<div class="result-item">검색 결과 없음</div>`;
+            }
+
+            $("#searchResults").html(html).show(); // ✅ 검색 결과 표시
+        },
+        error: function(xhr, status, error) {
+            console.error("검색 요청 실패:", error);
+        }
+    });
+}
+
+// 🔍 기업 상세 페이지로 이동하는 함수
+function goToCompanyDetail(corpCode) {
+    if (corpCode) {
+        let url = `/companies/${corpCode}/`;  // ✅ Django URL 패턴에 맞춰 수정
+        window.location.href = url;  // ✅ 페이지 이동
+    }
+}
+
+// 🔍 검색 결과 클릭 시 입력창에 반영 & 검색 결과 숨기기
+$(document).on("click", ".result-item", function() {
+    let selectedText = $(this).text().trim();
+    $("#search-input").val(selectedText).focus();
+    $("#searchResults").hide();
+});
+
+
+    // 📜 탭 버튼 클릭 이벤트
+    $(".tab-btn").click(function() {
+        $(".tab-btn").removeClass("active");
+        $(this).addClass("active");
+
+        let tab = $(this).attr("data-tab");
+        $(".tab-content").removeClass("active");
+        $("#" + tab).addClass("active");
+    });
+});
+
+</script>
+</body>
+</html>

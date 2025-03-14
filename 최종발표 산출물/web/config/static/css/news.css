@@ -1,0 +1,108 @@
+/* 메인 컨테이너 (중앙 정렬 & 폭 지정) */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: sans-serif;
+}
+
+/* 검색 영역 */
+.search-bar {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.search-bar input[type="text"] {
+    width: 500px;
+    height: 30px;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.search-bar button {
+    height: 46px;
+    width: 68px;
+    margin-left: 5px;
+    background-color: #ff6600;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+.search-bar button:hover {
+    background-color: #e65500;
+}
+
+/* 뉴스 목록 기본 스타일 */
+.news-list {
+    width: 100%;   /* 🔹 원하는 크기로 조절 (예: 60%) */
+    max-width: 650px;  /* 🔹 너무 커지지 않도록 제한 */
+    list-style: none;
+    margin: 0 auto;  /* 🔹 자동으로 가운데 정렬 */
+    padding: 0;
+}
+
+/* 말풍선(필) 형태로 꾸민 뉴스 아이템 */
+.news-item {
+    background: #fffbe6;              /* 살짝 연한 베이지/오렌지 톤 배경 */
+    border-radius: 20px;             /* pill(둥근 모서리) 형태 */
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    display: flex;                   /* 왼쪽(제목)과 오른쪽(날짜) 배치를 위해 */
+    justify-content: space-between;  /* 양 끝으로 정렬 */
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 약간의 그림자 */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.news-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* 뉴스 제목 (왼쪽) */
+.news-title {
+    text-decoration: none;
+    font-weight: bold;
+    color: #333;
+    font-size: 1rem;
+}
+.news-title:hover {
+    color: #ff6600;
+}
+
+/* 날짜 & 신문사 (오른쪽) */
+.pub-info {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+/* 페이지네이션 */
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+    max-width: 100%;
+}
+
+.page-link {
+    text-decoration: none;
+    color: #2b2d2e;
+    padding: 5px 10px;
+    margin: 0 3px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.page-link:hover {
+    background-color: #2b2d2e;
+    color: #ececec;
+}
+
+.current-page {
+    font-weight: bold;
+    padding: 5px 10px;
+    margin: 0 3px;
+    border-radius: 5px;
+    border: 1px solid #2b2d2e;
+    background-color: #2b2d2e;
+    color: white;
+    text-decoration: underline;  /* ✅ 현재 페이지 밑줄 추가 */
+}

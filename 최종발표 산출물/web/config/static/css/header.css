@@ -1,0 +1,161 @@
+/* 기본 스타일 */
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ff6600;
+    padding: 15px 50px;
+    color: white;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    height: 50px;
+}
+
+/* 로고 스타일 */
+.logos a {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+/* 메뉴 스타일 */
+.menu {
+    display: flex;
+}
+
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.menu ul li {
+    margin: 0 20px;
+}
+
+.menu ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+/* 📌 반응형 스타일 추가 */
+
+/* 태블릿 (768px 이하) */
+@media screen and (max-width: 1024px) {
+    .navbar {
+        padding: 15px 30px; /* 네비게이션 크기 조정 */
+    }
+
+    .logos a {
+        font-size: 24px; /* 로고 크기 조정 */
+    }
+
+    .menu ul li {
+        margin: 0 15px;
+    }
+
+    .menu ul li a {
+        font-size: 18px;
+    }
+}
+
+/* 📌 작은 태블릿 & 모바일 (768px 이하) */
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 10px 20px;
+    }
+
+    .logo a {
+        font-size: 22px;
+    }
+
+    .menu {
+        display: none; /* 모바일에서는 메뉴 숨김 */
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background-color: #ff6600;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .menu ul {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .menu ul li {
+        margin: 10px 0;
+    }
+
+    .menu ul li a {
+        font-size: 18px;
+    }
+
+    .hamburger {
+        display: block;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .menu.show {
+        display: flex;
+    }
+}
+
+/* 📌 초소형 모바일 (480px 이하) */
+@media screen and (max-width: 480px) {
+    .navbar {
+        padding: 10px 15px;
+    }
+
+    .logos a {
+        font-size: 20px;
+    }
+
+    .menu ul li a {
+        font-size: 16px;
+    }
+}
+/* 고정된 동그라미 스타일 */
+/* 고정된 동그라미 스타일 */
+.fixed-circle {
+    width: 40px;
+    height: 80px; /* 반원 형태 */
+    background-color: red;
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
+    position: absolute;
+    top: 50%;
+    right: 0; /* 왼쪽으로 배치 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: grab;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    user-select: none;
+}
+.fixed-circle:active {
+    cursor: grabbing;
+}
+
+

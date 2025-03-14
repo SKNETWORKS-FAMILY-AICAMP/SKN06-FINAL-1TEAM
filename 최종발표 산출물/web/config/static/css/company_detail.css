@@ -1,0 +1,111 @@
+/* 📌 기업 상세 정보와 Hexagon Chart를 가로 정렬 */
+.detail-container {
+  display: flex;
+  flex-wrap: nowrap;  /* ✅ 항상 가로 정렬 유지 */
+  justify-content: flex-start; /* 좌우 정렬 */
+  align-items: center;  /* ✅ 높이 맞춤 */
+  gap: 30px; /* 좌우 간격 */
+  padding: 20px;
+  max-width: 1700px;
+  margin-left: 0;
+}
+
+/* 기업 상세 카드 */
+.detail-card {
+  order: 1;
+  flex: 2; /* ✅ 여백을 균등하게 사용 */
+  max-width: 900px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  min-height: 400px; /* ✅ Hexagon Chart와 높이 맞추기 */
+  display: flex;
+  flex-direction: column;
+  justify-content: left; /* 중앙 정렬 */
+}
+
+/* 매출액 차트 */
+.revenue-chart-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 1200px;
+  height: auto;
+  margin-left: 0;
+  padding: 20px;
+  background: #FAFAFA;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.revenue-chart-container h3 {
+  margin-bottom: 5px;
+}
+
+.revenue-chart-container h4{
+  color: gray;
+  font-size: 14px;
+  margin-top: 0;
+}
+
+/* 매출 차트 크기 고정 */
+#revenueChart {
+  width: 100%;  
+  margin-top: 10px;
+}
+
+/* 📌 📊 Hexagon Chart 스타일 추가 */
+.hexagon-chart-container {
+  order: 2;
+  flex: 1; /* ✅ 차트가 남은 공간을 균등하게 차지 */
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: center;
+  max-width: 500px;  /* ✅ 너비 조정 */
+  height: 550px; /* ✅ 높이 고정 */
+  margin-left: auto;
+}
+
+/* Hexagon Chart 캔버스 */
+#hexagonChart {
+  width: 100% !important;  /* ✅ Chart.js가 크기 조정을 하지 않도록 강제 */
+  height: 100% !important;
+  max-width: 500px;
+  max-height: 500px;
+}
+
+/* 기업 정보 표 형태 */
+.info-table {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  row-gap: 10px;
+  column-gap: 10px;
+}
+
+.label {
+  font-weight: bold;
+  color: #555;
+}
+
+.value {
+  color: #333;
+}
+
+/* 홈페이지, 주소 등 링크 스타일 */
+.value a {
+  color: #0066cc;
+  text-decoration: none;
+}
+.value a:hover {
+  text-decoration: underline;
+}
+
+/* 하단 서비스 정보 */
+.services {
+  margin-top: 20px;
+  color: #444;
+  font-weight: bold;
+}

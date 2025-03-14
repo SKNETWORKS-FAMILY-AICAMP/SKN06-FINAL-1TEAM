@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>재무 정보</title>
+    <link rel="stylesheet" href="{% static 'css/financial.css' %}">
+    <style>
+        .test {
+    font-size: 50px;
+  }
+    </style>
+</head>
+<body>
+    <h1>단일 재무재표</h1>
+
+    <table id="financial-table">
+        <thead>
+            <tr>
+                <th>구분</th>
+                <th>2023년 총금액</th>
+                <th>2022년 총금액</th>
+                <th>2021년 총금액</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- 데이터가 여기에 삽입됨 -->
+        </tbody>
+    </table>
+
+    <!-- JSON 데이터를 숨겨진 script 태그에 저장 -->
+    <script id="json-data-bs" type="application/json">
+        {{ financial_bs|safe }}
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const buttons = document.querySelectorAll(".tab-button");
+            const contents = document.querySelectorAll(".financial-content");
+            let tableBody = document.getElementById("table-body");
+    
+            // 📌 JSON 데이터 저장
+            let jsonData = {
+                "financial-bs": JSON.parse(document.getElementById("json-data-bs").textContent),
+                "financial-cis": JSON.parse(document.getElementById("json-data-cis").textContent),
+                "financial-cf": JSON.parse(document.getElementById("json-data-cf").textContent)
+            };
+    
+            function createTableRows(data, level = 0, parentKey = "") {
+                let rows = "";
+                for (let key in data) {
+                    if (key === "amounts") continue;
+    
+                    if (typeof data[key] === "object" && data[key] !== null) {
+                        let rowKey = parentKey ? `${parentKey}-${key}` : key;
+                        let padding = 20 * level;
+    
+                        let hasChildren = Object.keys(data[key]).some(k => k !== "amounts");
+                        let hasAmounts = "amounts" in data[key];
+    
+                        let toggleButton = hasChildren ? `<span class="toggle-button collapsed"></span>` : "";
+    
+                        rows += `
+                            <tr data-key="${rowKey}" class="category collapsed">
+                                <td style="padding-left:${padding}px; text-align:left;">
+                                    ${toggleButton} ${key}
+                                </td>
+                                <td>${hasAmounts ? (data[key].amounts.amount_2023?.toLocaleString() || '-') : '-'}</td>
+                                <td>${hasAmounts ? (data[key].amounts.amount_2022?.toLocaleString() || '-') : '-'}</td>
+                                <td>${hasAmounts ? (data[key].amounts.amount_2021?.toLocaleString() || '-') : '-'}</td>
+                            </tr>
+                        `;
+    
+                        if (hasChildren) {
+                            rows += createTableRows(data[key], level + 1, rowKey);
+                        }
+                    }
+                }
+                return rows;
+            }
+    
+            function updateTable(selectedTab) {
+                tableBody.innerHTML = createTableRows(jsonData[selectedTab]);
+    
+                document.querySelectorAll(".category").forEach(row => {
+                    let key = row.getAttribute("data-key");
+                    let subRows = document.querySelectorAll(`tr[data-key^="${key}-"]`);
+    
+                    if (subRows.length === 0) {
+                        let toggleBtn = row.querySelector(".toggle-button");
+                        if (toggleBtn) {
+                            toggleBtn.remove();
+                        }
+                    }
+    
+                    subRows.forEach(subRow => subRow.classList.add("hidden"));
+    
+                    row.addEventListener("click", function () {
+                        let isExpanded = this.classList.contains("expanded");
+                        subRows.forEach(subRow => {
+                            if (isExpanded) {
+                                subRow.classList.add("hidden");
+                            } else {
+                                subRow.classList.remove("hidden");
+                            }
+                        });
+    
+                        this.classList.toggle("expanded");
+                        this.classList.toggle("collapsed");
+                    });
+                });
+            }
+    
+            // 📌 버튼 클릭 시 탭 전환 & 테이블 업데이트
+            buttons.forEach(button => {
+                button.addEventListener("click", function () {
+                    let target = this.getAttribute("data-target");
+    
+                    buttons.forEach(btn => btn.classList.remove("active"));
+                    contents.forEach(content => content.classList.remove("active"));
+    
+                    this.classList.add("active");
+                    document.getElementById(target).classList.add("active");
+    
+                    // 📌 테이블 데이터 갱신
+                    updateTable(target);
+                });
+            });
+            // 📌 기본값: 재무상태표(BS) 로드
+            updateTable("financial-bs");
+        });
+    </script>
+    
+    
+</body>
+</html>

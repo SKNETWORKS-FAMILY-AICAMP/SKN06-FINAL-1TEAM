@@ -1,0 +1,99 @@
+/* 📌 테이블 스타일 */
+#financial-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-left: 0;
+    padding: 20px;
+    font-size: 14px;
+    border: 1px solid #E0E0E0;
+}
+
+/* 📌 테이블 헤더 스타일 */
+#financial-table thead th {
+    background-color: #C3C3C3;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 12px;
+    border: 1px solid #C3C3C3;
+}
+
+/* 📌 테이블 데이터 스타일 */
+#financial-table tbody td {
+    padding: 10px;
+    border: 1px solid #E0E0E0;
+    text-align: right;
+}
+
+/* 📌 구분 컬럼 스타일 (왼쪽 정렬) */
+#financial-table tbody td:first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+/* 📌 행 구분 (배경색 최소화) */
+#financial-table tbody tr:hover {
+    background-color: #F5F5F5; /* 은은한 hover 효과 */
+}
+
+/* 📌 펼치기 가능한 카테고리 스타일 */
+.category {
+    background-color: #F9F9F9;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 📌 토글 버튼 스타일 */
+.toggle-button {
+    margin-right: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #666666;
+}
+
+/* 📌 숨겨진 행 스타일 */
+.hidden-row {
+    display: none;
+}
+
+/* 📌 재무 정보 탭 버튼 스타일 */
+.financial-tabs {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-left: 0;
+    padding: 20px;
+}
+
+.tab-button {
+    padding: 8px 16px;
+    border: 1px solid #BDBDBD;
+    background-color: #F5F5F5;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    font-weight: 500;
+    border-radius: 5px;
+}
+
+/* 📌 활성화된 탭 버튼 스타일 */
+.tab-button.active {
+    background-color: #FF6F00;
+    color: white;
+    border-color: #FF6F00;
+}
+
+/* 📌 탭 버튼 hover 효과 */
+.tab-button:hover {
+    background-color: #E0E0E0;
+}
+
+.amount-card {
+    background-color: #FAFAFA;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    padding: 20px;
+    width: 80%;
+    box-sizing: border-box;
+}
