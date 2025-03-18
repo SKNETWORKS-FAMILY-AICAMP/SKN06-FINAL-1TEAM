@@ -2,6 +2,13 @@
 박창규, 백하은, 성은진, 김지영, 노원재
 # 프로젝트: AI 기반 기업 분석 시스템
 
+## Teach Stack
+<img src="https://img.shields.io/badge/python-3776AB?style=flat&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/django-092E20?style=flat&logo=django&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=flat&logo=mysql&logoColor=white">
+
+![HuggingFace](https://img.shields.io/badge/HuggingFace-FF7A25?style=flat&logo=huggingface&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat&logo=amazon-aws&logoColor=white)
+
 ## 개요
 본 프로젝트는 기업 분석 및 투자 전략 수립을 지원하는 **AI 기반 검색 및 데이터 요약 시스템**입니다. 사용자가 기업 관련 질의를 하면, 최적의 데이터를 검색 및 분석하여 유용한 인사이트를 제공하는 **다중 에이전트 기반 RAG(Retrieval-Augmented Generation) 시스템**을 구축하였습니다.
 
