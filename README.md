@@ -2,12 +2,40 @@
 박창규, 백하은, 성은진, 김지영, 노원재
 # 프로젝트: AI 기반 기업 분석 시스템
 
-## Teach Stack
-<img src="https://img.shields.io/badge/python-3776AB?style=flat&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/django-092E20?style=flat&logo=django&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=flat&logo=mysql&logoColor=white">
+## 🛠 Teach Stack
 
-![HuggingFace](https://img.shields.io/badge/HuggingFace-FF7A25?style=flat&logo=huggingface&logoColor=white)
-![Docker](https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat&logo=amazon-aws&logoColor=white)
+<table>
+  <tr>
+    <th>Front-end</th>
+    <th>Back-end</th>
+    <th>AI & LLMs</th>
+    <th>DevOps & Cloud</th>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://img.shields.io/badge/CSS-1572B6?style=flat&logo=css3&logoColor=white">
+      <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black">
+    </td>
+    <td>
+      <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white">
+      <img src="https://img.shields.io/badge/Django-092E20?style=flat&logo=django&logoColor=white">
+      <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white">
+    </td>
+    <td>
+      <img src="https://img.shields.io/badge/OpenAI-412991?style=flat&logo=openai&logoColor=white">
+      <img src="https://img.shields.io/badge/Gemini-4285F4?style=flat&logo=google&logoColor=white">
+      <img src="https://img.shields.io/badge/LangChain-black?style=flat&logo=python&logoColor=white">
+      <img src="https://img.shields.io/badge/HuggingFace-yellow?style=flat&logo=huggingface&logoColor=white">
+    </td>
+    <td>
+      <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white">
+      <img src="https://img.shields.io/badge/AWS-orange?style=flat&logo=amazon-aws&logoColor=white">
+    </td>
+  </tr>
+</table>
+
+
+
 
 ## 개요
 본 프로젝트는 기업 분석 및 투자 전략 수립을 지원하는 **AI 기반 검색 및 데이터 요약 시스템**입니다. 사용자가 기업 관련 질의를 하면, 최적의 데이터를 검색 및 분석하여 유용한 인사이트를 제공하는 **다중 에이전트 기반 RAG(Retrieval-Augmented Generation) 시스템**을 구축하였습니다.
