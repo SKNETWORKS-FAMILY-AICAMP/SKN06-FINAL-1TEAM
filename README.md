@@ -9,11 +9,11 @@
 - **사업 보고서 요약**: OpenAI GPT 기반 요약 및 검색 기능 제공
 - **기업 재무 데이터 분석**: OpenDART API를 통해 수집한 재무제표 데이터를 분석하여 기업 전망 예측
 - **실시간 뉴스 분석**: 크롤링을 통한 실시간 뉴스 수집 및 감성 분석 수행
-- **AI 기반 검색**: Chroma DB를 활용한 벡터 검색 및 질의응답(Q&A) 기능 지원
-- **예측 모델링**: 머신러닝(선형 회귀, 다중 회귀) 기반 재무 예측
+- **예측 모델링**: 머신러닝(다중 회귀) 기반 재무 예측
 
 ## 시스템 아키텍처
-![시스템 아키텍처](시스템구성도.png)
+
+![시스템구성도](https://github.com/user-attachments/assets/5ce35c69-aa8c-4365-a5a2-da4061d81e00)
 
 - **백엔드**: Django 기반 REST API 구축
 - **데이터 저장**: MySQL (구조화 데이터), ChromaDB (벡터 데이터)
@@ -41,72 +41,8 @@
 4. **결과 제공**
    - API를 통해 프론트엔드 또는 외부 시스템에 응답 반환
    - 질의응답(Q&A) 기능을 통한 기업 분석 및 예측 결과 제공
+     
 
-## 설치 및 실행 방법
-### 1. 필수 요구 사항
-- Python 3.8 이상
-- Django, MySQL, ChromaDB
-- Docker 및 AWS EC2 환경 (선택 사항)
-
-### 2. 프로젝트 클론 및 환경 설정
-```bash
-git clone https://github.com/SKNETWORKS-FAMILY-AICAMP/SKN06-FINAL-1TEAM.git
-cd SKN06-FINAL-1TEAM
-python -m venv venv
-source venv/bin/activate  # (Windows: venv\Scripts\activate)
-pip install -r requirements.txt
-```
-
-### 3. 데이터베이스 설정
-```bash
-# MySQL DB 생성
-CREATE DATABASE ai_project;
-
-# 환경 변수 설정 (.env 파일 생성)
-DATABASE_URL=mysql://user:password@localhost/ai_project
-```
-
-### 4. 서버 실행
-```bash
-python manage.py migrate
-python manage.py runserver
-```
-
-## API 사용 방법
-### 1. 사업 보고서 검색 API
-- **Endpoint**: `/api/search`
-- **Method**: POST
-- **Request Body**:
-```json
-{
-  "query": "현대자동차 2024년 사업 보고서"
-}
-```
-- **Response**:
-```json
-{
-  "summary": "현대자동차의 2024년 매출은 100조 원으로, 전년 대비 10% 증가했습니다.",
-  "keywords": ["매출", "자동차 산업", "전기차"]
-}
-```
-
-### 2. 재무 예측 API
-- **Endpoint**: `/api/predict`
-- **Method**: POST
-- **Request Body**:
-```json
-{
-  "company": "현대자동차",
-  "year": 2025
-}
-```
-- **Response**:
-```json
-{
-  "predicted_revenue": "110조 원",
-  "confidence": "95%"
-}
-```
 
 ## 모델 성능 평가
 - **검색 모델 Precision@5**: 82%
@@ -115,16 +51,15 @@ python manage.py runserver
 
 ## 향후 개선 방향
 1. **예측 모델 고도화**
-   - 다중 회귀 및 LSTM 기반 시계열 분석 모델 도입
+   - LSTM 기반 시계열 분석 모델 도입
    - 뉴스 감성 분석 결과를 예측 모델에 반영
 
-2. **검색 및 요약 최적화**
+2. **데이터 전처리**
+   - 사업보고서 내 다양한 형식의 데이터를 정규화하여 일관된 구조로 변환
+     
+3. **검색 및 요약 최적화**
    - ChromaDB 벡터 검색 성능 개선
-   - GPT 프롬프트 엔지니어링을 통한 응답 품질 향상
-
-3. **API 성능 최적화**
-   - Django API의 속도 및 응답 성능 개선
-   - 대량 데이터 처리 최적화
+   - 도메인 지식을 활용한 사용자 질문에 대한 mapping 도입
 
 ## 프로젝트 팀
 - **백하은**: 데이터 전처리 및 AI 모델 개발
