@@ -1,6 +1,24 @@
 # SKN06-FINAL-1TEAM
 박창규, 백하은, 성은진, 김지영, 노원재
 # 프로젝트: AI 기반 기업 분석 시스템
+<table>
+  <tr>
+    <th>창규</th>
+    <th>지영</th>
+    <th>원재</th>
+    <th>하은</th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/de728c8a-6828-4cc8-b057-b104815c7d07" width="200"></td>
+    <td><img src="https://github.com/user-attachments/assets/7535cfb6-83f2-4c1c-ad20-3714a590e6ee" width="200"></td>
+    <td><img src="https://github.com/user-attachments/assets/e138400d-7b88-4e12-884e-6f8c86f48424" width="200"></td>
+    <td><img src="https://github.com/user-attachments/assets/d120b931-2ef6-41b6-8b16-0b747bdcae1e" width="200"></td>
+  </tr>
+</table>
+
+
+
+
 
 ## 🛠 Teach Stack
 
