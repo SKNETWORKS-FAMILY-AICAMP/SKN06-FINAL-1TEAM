@@ -1,4 +1,5 @@
 .env
 .idea/
 chromadb_store2/
+chromadb_FinLang/
 __pycache__/

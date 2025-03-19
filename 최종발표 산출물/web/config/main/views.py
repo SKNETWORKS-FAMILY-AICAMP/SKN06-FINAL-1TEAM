@@ -8,6 +8,8 @@ from langchain.vectorstores import Chroma
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
 from company.models import CompanyList
+from langchain.embeddings import HuggingFaceEmbeddings
+
 def home_view(request):
     return render(request, 'home.html')
 
@@ -16,10 +18,10 @@ def home_view(request):
 api_key = os.getenv("OPEN_API_KEY")
 llm = ChatOpenAI(model_name="gpt-4o-mini", openai_api_key=api_key)
 
-embedding_model = OpenAIEmbeddings(model="text-embedding-3-small", openai_api_key=api_key)
-CHROMA_DB_DIR = os.path.join(settings.BASE_DIR,"main","chromadb_store2")
-print("CH :",CHROMA_DB_DIR)
-# 벡터DB 연결
+embedding_model = HuggingFaceEmbeddings(model_name="FinLang/finance-embeddings-investopedia")
+
+
+CHROMA_DB_DIR = os.path.join(settings.BASE_DIR,"main","chromadb_FinLang")
 
 def search_company(request):
     keyword = request.GET.get("keyword", "").strip()  # 🔹 검색어 가져오기
