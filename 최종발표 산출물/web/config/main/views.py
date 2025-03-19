@@ -1,5 +1,5 @@
 from django.shortcuts import render
-import json,os
+import json,os,markdown
 from django.conf import settings  # settings.py에서 BASE_DIR 가져오기
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -40,14 +40,10 @@ def chatbot_api(request):
         try:
             data = json.loads(request.body)
             user_query = data.get("message")
-            print("벡벡 :",user_query)
             if not user_query:
                 return JsonResponse({"error": "질문을 입력하세요!"}, status=400)
 
-            print(f"📢 사용자 질문: {user_query}")  # 질문 로그 추가
-
             # LangChain을 활용한 검색 실행
-            print("CHASDWQD :", CHROMA_DB_DIR)
             collection = Chroma(
                 collection_name="company_docs",
                 embedding_function=embedding_model,
@@ -56,13 +52,14 @@ def chatbot_api(request):
             agent_reset(llm)
             response = handle_user_query(user_query, collection, llm)
 
-            print(f"📢 LangChain 응답: {response}")  # 결과 로그 추가
+            # 🔹 마크다운을 HTML로 변환 (extra 확장 사용)
+            response_html = markdown.markdown(response, extensions=["extra"])
 
-            return JsonResponse({"response": response})
+            return JsonResponse({"response": response_html})  # HTML 그대로 반환
 
         except Exception as e:
             import traceback
-            print("🚨 오류 발생:", traceback.format_exc())  # 전체 오류 출력
+            print("🚨 오류 발생:", traceback.format_exc())
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "POST 요청만 지원됩니다."}, status=405)

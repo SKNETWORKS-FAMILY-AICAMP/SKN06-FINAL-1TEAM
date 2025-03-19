@@ -22,24 +22,23 @@ def extract_company_and_info(query: str, llm):
         print("🚨 JSON 파싱 오류 발생. GPT의 응답을 확인하세요.")
         return None, None
     if not company_names or not info:
-        print("🚨 기업명 또는 정보가 부족함.")
+        print("🚨 기업명 또는 정보가 부족함 ex) 현대자동차 별도재무제표 기준 매출액 알려줘")
         return None, None
     return company_names, info
 
 def get_candidate_companies(extracted_company: str, collection, llm) -> list:
     """
     DB에 저장된 전체 기업명 목록 중, 사용자가 입력한 기업명과 유사한 기업들을 GPT를 통해 반환합니다.
-    출력은 쉼표로 구분된 기업명 문자열을 리스트로 반환합니다.
     """
     all_docs = collection.get(include=["metadatas"])
-    print("all_docs :", all_docs)
-    company_set = set()
-    for doc in all_docs["metadatas"]:
-        if "company" in doc:
-            company_set.add(doc["company"])
+
+    company_set = {doc["company"].strip() for doc in all_docs["metadatas"] if "company" in doc}
     company_list = list(company_set)
+
     if not company_list:
         return []
+
+    # GPT 프롬프트를 사용해 유사한 기업명 찾기
     company_list_str = ", ".join(company_list)
     prompt = f"""
     사용자가 입력한 기업명: "{extracted_company}".
@@ -47,8 +46,10 @@ def get_candidate_companies(extracted_company: str, collection, llm) -> list:
     위 목록 중, 사용자가 입력한 기업명과 유사한 기업들을 모두 출력해 주세요.
     출력은 오직 기업명만 쉼표로 구분하여 하나의 문자열로 출력해 주세요.
     """
+
     response = llm.invoke(prompt).content.strip()
     candidates = [x.strip() for x in response.split(",") if x.strip()]
+    
     return candidates
 
 def get_valid_company(extracted_company: str, collection,llm) -> str:

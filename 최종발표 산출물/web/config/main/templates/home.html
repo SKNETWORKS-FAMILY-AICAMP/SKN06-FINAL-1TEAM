@@ -26,8 +26,6 @@
         }
     </style>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet"> -->
-    <link rel="stylesheet" href="{% static 'css/global.css' %}">
 
 </head>
 <body>
@@ -36,15 +34,16 @@
 
     <div class="container">
         <h1 class="logo">
-            <img src="{% static 'images/Stratify logo_ver4.png' %}" alt="Stratify Logo" style="width: 150px; max-width: 300px; height: auto;">
+            <img src="{% static 'images/Stratify logo_ver4.png' %}" alt="Stratify Logo" style="width: 225px; max-width: 300px; height: auto;">
         </h1>
-        
+        <br>
         <!-- 🔎 검색창 -->
         <div class="search-container">
             <input type="text" id="search-input" placeholder="기업명 검색" autocomplete="off">
             <button id="search-btn">S e a r c h</button>
             <div id="searchResults"></div>
         </div>
+        <br>
 
         <!-- 📌 탭 버튼 -->
         <div class="tabs-container">
@@ -130,21 +129,18 @@
         </script>
     <script>
 $(document).ready(function() {
-    let searchTimeout; // ✅ 디바운싱을 위한 변수
+    $(".descriptions").hide(); // 기본적으로 숨김
 
-    // 🔍 검색 입력 이벤트 (keyup → input으로 변경)
-    $("#search-input").on("input", function() {
-        let query = $(this).val().trim(); // ✅ 공백 제거
+    $(".tab-btn").click(function() {
+        $(".tab-btn").removeClass("active");
+        $(this).addClass("active");
 
-        clearTimeout(searchTimeout); // ✅ 기존 요청 제거 (디바운싱)
+        let tab = $(this).attr("data-tab");
 
-        if (query.length > 1) { // ✅ 최소 2글자 이상 입력 시 검색 실행
-            searchTimeout = setTimeout(() => {
-                searchCompany(query);
-            }, 300); // ✅ 300ms 동안 추가 입력이 없으면 실행
-        } else {
-            $("#searchResults").hide();
-        }
+        $(".tab-content").removeClass("active").hide(); // 기존 콘텐츠 숨기기
+        $("#" + tab).addClass("active").fadeIn(); // 선택한 콘텐츠 표시
+
+        $(".descriptions").fadeIn(); // 콘텐츠 영역 표시
     });
 
     // 🔎 검색 버튼 클릭 이벤트 추가

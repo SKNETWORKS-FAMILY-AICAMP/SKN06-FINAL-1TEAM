@@ -72,7 +72,7 @@ def company_list(request):
         )
 
     # 3) 페이지네이션 (페이지당 10개씩)
-    paginator = Paginator(companies, 10)
+    paginator = Paginator(companies, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

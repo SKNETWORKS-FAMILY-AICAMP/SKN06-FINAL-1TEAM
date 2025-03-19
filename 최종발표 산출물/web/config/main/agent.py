@@ -8,6 +8,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from main.prediction.llm import interactive_forecast
 from main.question.llm import process_question_query
 from main.summarization.llm import process_summarization_query
+from main.news.llm import process_news_query
 import os
 # OpenAI 모델 초기화 (GPT-4o-mini r사용)
 api_key = os.getenv("OPEN_API_KEY")
@@ -15,8 +16,8 @@ api_key = os.getenv("OPEN_API_KEY")
 # 질문 분류 함수
 def classify_question(query,llm):
     prompt = f"""
-    사용자의 질문을 "예측", "검색", "요약" 중 하나로 분류하세요.
-    반드시 다음 형식으로만 출력하세요: 예측 / 검색 / 요약 (그 외 단어 포함 금지)
+    사용자의 질문을 "예측", "검색", "요약", "뉴스" 중 하나로 분류하세요.
+    반드시 다음 형식으로만 출력하세요: 예측 / 검색 / 요약 / 뉴스 (그 외 단어 포함 금지)
 
     질문: "{query}"
     출력:
@@ -27,13 +28,21 @@ def classify_question(query,llm):
 
 # 질문 유형별 처리 함수
 def process_question(query,collection, llm):
-    return process_question_query(query,collection, llm)
+    openai_llm = ChatOpenAI(
+        model_name="gpt-4o-mini",
+        openai_api_key=api_key,
+        temperature=0.1
+    )
+    return process_question_query(query,collection, openai_llm)
 
 def process_per(query,llm):
     return interactive_forecast(query,llm)
 
 def process_summarization(query,collection,llm):
     return process_summarization_query(query,collection,llm)
+
+def process_news(query,collection,llm):
+    return process_news_query(query,collection,llm)
 
 # Tool 정의
 tools = [
@@ -51,6 +60,11 @@ tools = [
         name="Process Summarization Question",
         func=process_summarization,
         description="사용자가 요약을 요청할 경우 실행되는 도구"
+    ),
+    Tool(
+        name="Process News Question",
+        func=process_news,
+        description="사용자가 뉴스요약을 요청할 경우 실행되는 도구"
     ),
 ]
 
@@ -86,6 +100,9 @@ def handle_user_query(query,collection, llm):
     elif category == "요약":
         print("📝 요약 실행:", query)
         return process_summarization(query, collection, llm)
+    elif category == "뉴스":
+        print(" 뉴스 실행:", query)
+        return process_news(query, collection, llm)
     else:
         return "⚠️ 질문 유형을 분류할 수 없습니다."
     

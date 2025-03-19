@@ -1,45 +1,88 @@
-    <div class="chatbot-container" id="chatbot">
-        <div class="chatbot-header">
-            ChatBot
-            <button class="close-btn" onclick="toggleChatbot()">×</button>
-        </div>
-
-        <div class="chatbox" id="chatbox">
-            <div class="message bot-message">안녕하세요! 무엇을 도와드릴까요? 😊</div>
-        </div>
-
-        <div class="suggested-questions">
-            <button onclick="selectSuggestedQuestion('현대위아의 2023년 당기순이익을 알려주세요.')">현대위아의 2023년 당기순이익을 알려주세요.</button>
-            <button onclick="selectSuggestedQuestion('현대모비스의 2024년 전망을 별도재무제표 기반으로 예측해주세요.')">현대모비스의 2024년 전망을 별도재무제표 기반으로 예측해주세요.</button>
-            <button onclick="selectSuggestedQuestion('최근 자동차 산업의 언론 동향이 어떤가요?')">최근 자동차 산업의 언론 동향이 어떤가요?</button>
-        </div>
-
-        <div class="chat-input">
-            <input type="text" id="user-input" placeholder="메시지를 입력하세요...">
-            <button onclick="sendMessage()">전송</button>
-        </div>
+<div class="chatbot-container" id="chatbot">
+    <div class="chatbot-header">
+        ChatBot
+        <button class="close-btn" onclick="toggleChatbot()">×</button>
     </div>
+
+    <div class="chatbox" id="chatbox">
+        <div class="message bot-message">안녕하세요! 무엇을 도와드릴까요? 😊</div>
+    </div>
+
+    <div class="suggested-questions">
+        <button onclick="selectSuggestedQuestion('현대위아의 2023년 당기순이익을 알려주세요.')">
+            현대위아의 2023년 당기순이익을 알려주세요.
+        </button>
+        <button onclick="selectSuggestedQuestion('현대자동차 별도재무제표 기준 3년간 매출액,영업이익,당기순이익을 요약해주세요.')">
+            현대자동차 별도재무제표 기준 3년간 매출액,영업이익,당기순이익을 요약해주세요.
+        </button>
+        <button onclick="selectSuggestedQuestion('현대모비스의 2024년 전망을 별도재무제표 기반으로 예측해주세요.')">
+            현대모비스의 2024년 전망을 별도재무제표 기반으로 예측해주세요.
+        </button>
+        <button onclick="selectSuggestedQuestion('최근 자동차 산업의 언론 동향이 어떤가요?')">
+            최근 자동차 산업의 언론 동향이 어떤가요?
+        </button>
+    </div>
+
+    <div class="chat-input">
+        <input type="text" id="user-input" placeholder="메시지를 입력하세요..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">전송</button>
+    </div>
+
+    <!-- 🔴 크기 조절을 위한 div 추가 -->
+    <!-- 왼쪽 상단 & 왼쪽 하단에서 조절 가능하도록 두 개의 resizer 추가 -->
+<div class="resizer resizer-top-left" id="resizerTopLeft"></div>
+<div class="resizer resizer-bottom-left" id="resizerBottomLeft"></div>
+
+</div>
 <style>
     * {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-    .chatbot-container {
-        position: fixed;
-        top: 50%;
-        right: -550px;
-        width: 500px;
-        height: 75%;
-        max-height: 750px;
-        background: #fff;
-        border-radius: 10px 0 0 10px;
-        box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
-        transition: right 0.3s ease-in-out;
-        transform: translateY(-50%);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
+.chatbot-container {
+    position: fixed;
+    top: 50%;
+    right: -550px;
+    width: 500px;
+    height: 75%;
+    max-width: 2000px;
+    max-height: 1000px;
+    background: #fff;
+    border-radius: 10px 0 0 10px;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+    transition: right 0.3s ease-in-out;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    resize: none; /* 기본적인 크기 조절 방지 */
+    min-width: 300px;
+    min-height: 400px;
+}
+
+/* 공통 스타일 */
+.resizer {
+    width: 15px;
+    height: 15px;
+    background: #FF6F00;
+    position: absolute;
+    cursor: nwse-resize;
+    border-radius: 3px;
+}
+
+/* 🔴 왼쪽 상단 (↖ 방향 조절) */
+.resizer-top-left {
+    top: 0;
+    left: 0;
+    cursor: nwse-resize;
+}
+
+/* 🔵 왼쪽 하단 (↙ 방향 조절) */
+.resizer-bottom-left {
+    bottom: 0;
+    left: 0;
+    cursor: nesw-resize;
+}
 
     .chatbot-header {
         background: #FFF5E1;
@@ -104,12 +147,14 @@
     .bot-message {
         background: #ddd;
         align-self: flex-start;
+        font-size: 14px;
     }
 
     .user-message {
         background: #FF6F00;
         color: #fff;
         align-self: flex-end;
+        font-size: 16px;
     }
 
     .chat-input {
@@ -143,7 +188,7 @@
         right: 0 !important;
     }
 </style>
-
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
     function toggleChatbot() {
         const chatbot = document.getElementById("chatbot");
@@ -151,49 +196,43 @@
     }
 
     function sendMessage() {
-        const inputField = document.getElementById("user-input");
-        const messageText = inputField.value.trim();
-        if (messageText === "") return;
+            const inputField = document.getElementById("user-input");
+            const messageText = inputField.value.trim();
+            if (messageText === "") return;
 
-        const chatBox = document.getElementById("chatbox");
+            const chatBox = document.getElementById("chatbox");
 
-        // 사용자 메시지 추가
-        const userMessage = document.createElement("div");
-        userMessage.classList.add("message", "user-message");
-        userMessage.innerText = messageText;
-        chatBox.appendChild(userMessage);
+            // 사용자 메시지 추가
+            const userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user-message");
+            userMessage.innerText = messageText;
+            chatBox.appendChild(userMessage);
 
-        // 입력창 초기화
-        inputField.value = "";
+            // 입력창 초기화
+            inputField.value = "";
 
-        // 봇 응답 자리 만들기
-        const botMessage = document.createElement("div");
-        botMessage.classList.add("message", "bot-message");
-        botMessage.innerText = "답변 준비 중...";
-        chatBox.appendChild(botMessage);
+            // 봇 응답 자리 만들기
+            const botMessage = document.createElement("div");
+            botMessage.classList.add("message", "bot-message");
+            botMessage.innerText = "답변 준비 중...";
+            chatBox.appendChild(botMessage);
 
-        // 자동 스크롤
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        // Django API 호출하여 챗봇 응답 가져오기
-        fetch("/chat/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ message: messageText }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            // 기존 "답변 준비 중..." 메시지 업데이트
-            botMessage.innerText = data.response;
-            chatBox.scrollTop = chatBox.scrollHeight; // 최신 메시지 보기
-        })
-        .catch(error => {
-            botMessage.innerText = "⚠️ 오류 발생! 다시 시도해 주세요.";
-            console.error("오류 발생:", error);
-        });
-    }
+            // Django API 호출하여 챗봇 응답 가져오기
+            fetch("/chat/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: messageText }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                botMessage.innerHTML = marked.parse(data.response); // 🔹 마크다운 적용
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(error => {
+                botMessage.innerText = "⚠️ 오류 발생! 다시 시도해 주세요.";
+                console.error("오류 발생:", error);
+            });
+        }
 
     function selectSuggestedQuestion(question) {
         const inputField = document.getElementById("user-input");
@@ -202,4 +241,73 @@
         // sendMessage() 호출하여 자동 전송
         sendMessage();
     }
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+    const chatbot = document.getElementById("chatbot");
+    const resizerTopLeft = document.getElementById("resizerTopLeft");
+    const resizerBottomLeft = document.getElementById("resizerBottomLeft");
+
+    let isResizing = false;
+    let startX, startY, startWidth, startHeight, startRight, startTop;
+
+    function initResize(event, resizeType) {
+        isResizing = true;
+        startX = event.clientX;
+        startY = event.clientY;
+        startWidth = chatbot.offsetWidth;
+        startHeight = chatbot.offsetHeight;
+        startRight = window.innerWidth - chatbot.getBoundingClientRect().right;
+        startTop = chatbot.getBoundingClientRect().top;
+
+        document.addEventListener("mousemove", (e) => resizeChatbot(e, resizeType));
+        document.addEventListener("mouseup", stopResizing);
+    }
+
+    function resizeChatbot(event, resizeType) {
+        if (isResizing) {
+            let newWidth, newHeight, newLeft, newTop;
+
+            if (resizeType === "top-left") {
+                newWidth = startWidth + (startX - event.clientX);
+                newHeight = startHeight + (startY - event.clientY);
+                newLeft = window.innerWidth - startRight - newWidth;
+                newTop = startTop + (event.clientY - startY);
+
+                // 최소 크기 유지
+                if (newHeight >= 400) {
+                    chatbot.style.height = `${newHeight}px`;
+                }
+
+                if (newWidth >= 300) {
+                    chatbot.style.width = `${newWidth}px`;
+                    chatbot.style.left = `${Math.max(0, newLeft)}px`;
+                }
+            }
+
+            if (resizeType === "bottom-left") {
+                newHeight = startHeight + (event.clientY - startY);
+
+                if (newHeight >= 400) {
+                    chatbot.style.height = `${newHeight}px`;
+                }
+            }
+        }
+    }
+
+    function stopResizing() {
+        isResizing = false;
+        document.removeEventListener("mousemove", resizeChatbot);
+        document.removeEventListener("mouseup", stopResizing);
+    }
+
+    resizerTopLeft.addEventListener("mousedown", (event) => initResize(event, "top-left"));
+    resizerBottomLeft.addEventListener("mousedown", (event) => initResize(event, "bottom-left"));
+});
+
+
+    ;
 </script>

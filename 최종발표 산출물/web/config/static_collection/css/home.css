@@ -1,7 +1,8 @@
+/* 로고 스타일 */
 .logo {
     font-size: 80px;
-    color: orange;
-    text-shadow: 3px 3px 6px gray;
+    color: #ff8c00; /* 더 부드러운 오렌지 색상 */
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 효과 */
     text-align: center;
     margin-bottom: 20px;
 }
@@ -11,71 +12,77 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 15px; /* 간격을 조금 더 넓게 */
     margin-bottom: 30px;
 }
 
+/* 드롭다운, 검색 입력, 버튼 스타일 */
 .dropdown, .search-input, .search-btn {
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid gray;
-    font-size: 16px;
+    border: 1px solid #ccc; /* 경계 색상 변경 */
+    font-size: 20px; /* 폰트 크기 조정 */
+    transition: border-color 0.3s ease; /* 경계 색상 변화 애니메이션 */
 }
 
+.dropdown:focus, .search-input:focus, .search-btn:focus {
+    border-color: #ff6600; /* 포커스 시 경계 색상 변경 */
+}
+
+/* 검색 입력 스타일 */
 #search-input {
     flex: 1;
     max-width: 48%;
-    height: 30px;
+    height: 56px; /* 높이 조정 */
     padding: 12px 20px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-
+    border-radius: 8px; /* 더 부드러운 모서리 */
+    font-size: 20px;
 }
 
+/* 검색 버튼 스타일 */
 #search-btn {
-
     width: 50%;
-    max-width: 100px;
+    max-width: 120px; /* 버튼 최대 너비 조정 */
     height: 56px;
     margin-left: 5px;
-    background-color: #ff6600; /* ✅ Identity Color */
+    background-color: #ff6600; /* Identity Color */
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px; /* 더 부드러운 모서리 */
     cursor: pointer;
-
-    transition: background 0.3s ease-in-out;
+    transition: background 0.3s ease-in-out, transform 0.2s; /* 애니메이션 추가 */
     text-align: center;
 }
 
-.search-btn:hover {
+#search-btn:hover {
     background-color: #E65C00;
+    transform: scale(1.05); /* 호버 시 크기 증가 */
 }
 
 /* 탭 버튼 컨테이너 */
 .tabs-container {
     display: flex;
     justify-content: center;
-
-    gap: 10px;
+    gap: 15px; /* 간격을 조금 더 넓게 */
     margin-bottom: 20px;
 }
 
 /* 탭 버튼 스타일 */
 .tab-btn {
     background: #ff6600;
-
     color: white;
     border: none;
     padding: 14px 22px;
     font-size: 16px;
     border-radius: 10px;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
+    transition: background 0.3s ease-in-out, transform 0.2s; /* 애니메이션 추가 */
 }
 
 .tab-btn:hover {
     background: #ff4500;
+    transform: scale(1.05); /* 호버 시 크기 증가 */
 }
 
 .tab-btn.active {
@@ -85,20 +92,19 @@
 
 /* 내용 컨테이너 */
 .descriptions {
-    background: linear-gradient(135deg, #ffffff, #f8f9fa);
-    border: 1px solid #ddd;
-    border-radius: 15px;
+    display: none; /* 기본적으로 숨김 */
+    background: white;
+    border-radius: 12px;
     padding: 30px;
-    max-width: 35%;
-    margin: 30px auto;
-    text-align: center;
+    max-width: 60%; /* 너비 조정 */
+    margin: 0 auto;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
+    text-align: center;
 }
 
 /* 탭 내용 (전환 애니메이션) */
 .tab-content {
-    display: none;
+    display: none; /* 기본적으로 숨김 */
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
@@ -137,9 +143,7 @@
 }
 
 .descriptions ul li::before {
-
     color: #28a745;
-
     position: absolute;
     left: 0;
 }
