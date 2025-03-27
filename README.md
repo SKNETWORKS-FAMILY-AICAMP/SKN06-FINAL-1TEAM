@@ -4,9 +4,9 @@
 <table>
   <tr>
     <th>창규</th>
+    <th>하은</th>
     <th>지영</th>
     <th>원재</th>
-    <th>하은</th>
   </tr>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/de728c8a-6828-4cc8-b057-b104815c7d07" width="200"></td>
